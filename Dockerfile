@@ -1,7 +1,8 @@
 FROM riffcashcompiler AS COMPILER
-ADD . /source/
+COPY . /source/
 WORKDIR /source/
 RUN ./autogen.sh
+RUN mkdir /source/build
 RUN cd /source/build && ../configure \
                     --cache-file=config.cache \
                     --disable-dependency-tracking \
@@ -30,8 +31,9 @@ RUN cd /source/build/riffcash-x86_64-unknown-linux-gnu && ./configure \
                     CPPFLAGS=-DDEBUG_LOCKORDER
 
 RUN cd /source/build/riffcash-x86_64-unknown-linux-gnu && make -j4 install
-FROM riffcashrunner
 
+FROM riffcashrunner
+COPY --from=COMPILER /lib/x86_64-linux-gnu/ /lib/x86_64-linux-gnu/
 COPY --from=COMPILER /opt/riffcash /opt/riffcash
 
 ENTRYPOINT ["/opt/riffcash/bin/riffcashd"]
