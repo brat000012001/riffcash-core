@@ -1,0 +1,60 @@
+FROM riffcashw64compiler AS COMPILER
+ENV MAKEJOBS -j4
+ENV RUN_TESTS false
+ENV CHECK_DOC 0
+ENV BOOST_TEST_RANDOM 1
+ENV CCACHE_SIZE 100M
+ENV CCACHE_TEMPDIR /tmp/.ccache-temp
+ENV CCACHE_COMPRESS 1
+ENV SDK_URL https://bitcoincore.org/depends-sources/sdks
+ENV PYTHON_DEBUG 1
+ENV WINEDEBUG fixme-all
+ENV RIFFCASH_SCRYPT 0
+ENV HOST x86_64-w64-mingw32
+ENV DEP_OPTS "NO_QT=1"
+ENV PACKAGES "python3 python3-dev python3-pip nsis g++-mingw-w64-x86-64 wine64 bc"
+ENV DPKG_ADD_ARCH="i386"
+ENV BITCOIN_CONFIG "--enable-reduce-exports --enable-sse2"
+ENV GOAL install
+COPY . /source/
+WORKDIR /source/
+RUN ./autogen.sh
+RUN mkdir /source/build
+RUN make $MAKEJOBS -C depends HOST=$HOST NO_QT=1
+RUN depends/$HOST/native/bin/ccache --max-size=$CCACHE_SIZE
+RUN cd /source/build && ../configure \
+                    --cache-file=config.cache \
+                    --disable-dependency-tracking \
+                    --prefix=/opt/riffcash \
+                    --bindir=/opt/riffcash/bin \
+                    --libdir=/opt/riffcash/lib \
+                    --enable-gui \
+                    --enable-sse2 \
+                    --enable-zmq \
+                    --enable-glibc-back-compat \
+                    --enable-reduce-exports \
+                    --with-incompatible-bdb \
+                    --disable-tests \
+                    CPPFLAGS=-DDEBUG_LOCKORDER
+
+RUN cd /source/build && make $MAKEJOBS distdir VERSION=$HOST
+RUN cd /source/build/riffcash-$HOST && ./configure \
+                    --cache-file=config.cache \
+                    --disable-dependency-tracking \
+                    --prefix=/opt/riffcash \
+                    --bindir=/opt/riffcash/bin \
+                    --libdir=/opt/riffcash/lib \
+                    --enable-gui \
+                    --enable-sse2 \
+                    --enable-zmq \
+                    --enable-glibc-back-compat \
+                    --enable-reduce-exports \
+                    --with-incompatible-bdb \
+                    --disable-tests \
+                    CPPFLAGS=-DDEBUG_LOCKORDER
+
+RUN cd /source/build/riffcash-$HOST && make $MAKEJOBS $GOAL
+
+FROM debian:stretch-slim
+
+COPY --from=COMPILER /opt/riffcash /opt/riffcash

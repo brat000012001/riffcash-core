@@ -13,6 +13,7 @@ RUN apt-get update && \
         cmake \
         curl \
         git \
+        g++-mingw-w64-x86-64 \
         imagemagick \
         libboost-all-dev \
         libbz2-dev \
@@ -26,6 +27,7 @@ RUN apt-get update && \
         libtiff-tools \
         libtool \
         libz-dev \
+        nsis \
         pkg-config \
         python-dev \
         python-pip \
@@ -36,6 +38,7 @@ RUN apt-get update && \
         qttools5-dev-tools \
         protobuf-compiler \
         python3-zmq \
+        wine64 \
         wget
 
 RUN pip install ez_setup
