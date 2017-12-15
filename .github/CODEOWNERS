@@ -1,0 +1,8 @@
+# Review official documentation prior to making changes.
+# https://help.github.com/articles/about-codeowners/
+
+contrib/* @riffcash/corecontributors
+depends/* @riffcash/corecontributors
+share/* @riffcash/corecontributors
+src/* @riffcash/corecontributors
+test/* @riffcash/corecontributors
