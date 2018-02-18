@@ -52,6 +52,7 @@ static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits
     const char* pszTimestamp = "Rochester DandC Oct 21 1991 S and R Productions Throws Largest House Party To Date";
     const CScript genesisOutputScript = CScript() << ParseHex("040184710fa689ad5023690c80f3a49c8f13f8d45b8c857fbcbc8bc4a8e4d3eb4b10f4d4604fa08dce601aaf0f470216fe1b51850b4acf21b179c45070ac7b03a9") << OP_CHECKSIG;
     CBlock genesis = CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
+#if 0
     if (true)
     {
 
@@ -84,6 +85,7 @@ static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits
         printf("genesis.GetHash = %s\n", genesis.GetHash().ToString().c_str());
         printf("genesis.hashMerkleRoot = %s\n", genesis.hashMerkleRoot.ToString().c_str());
     }
+#endif // 0
     return genesis;
 }
 
@@ -238,8 +240,8 @@ public:
 
         genesis = CreateGenesisBlock(1512313414, 897086, 0x1e0ffff0, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x00"));
-        assert(genesis.hashMerkleRoot == uint256S("0x00"));
+        assert(consensus.hashGenesisBlock == uint256S("0xa6dbb6100a1e84ec56914b623cda8f958e6d09897f8bc105d79f59ab671f2ccb"));
+        assert(genesis.hashMerkleRoot == uint256S("0x1840dc0b67ad372b8af99ba568fe71fa3a2fe470928c346f78586459b8eef3d7"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -319,8 +321,8 @@ public:
 
         genesis = CreateGenesisBlock(1296688602, 0, 0x207fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x00"));
-        assert(genesis.hashMerkleRoot == uint256S("0x00"));
+        assert(consensus.hashGenesisBlock == uint256S("0x4d77e5b569bddc62e45760f261f5414c06278a07caa4f5b28b0309cd9431240a"));
+        assert(genesis.hashMerkleRoot == uint256S("0x1840dc0b67ad372b8af99ba568fe71fa3a2fe470928c346f78586459b8eef3d7"));
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();      //!< Regtest mode doesn't have any DNS seeds.
