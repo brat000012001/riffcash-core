@@ -114,3 +114,4 @@ contrib/devtools/split-debug.sh
 .cproject
 .project
 .settings
+.pydevproject
